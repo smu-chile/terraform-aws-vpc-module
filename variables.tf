@@ -2596,3 +2596,9 @@ variable "create_egress_only_igw" {
   type        = bool
   default     = true
 }
+
+variable "cluster-vpc" {
+  description = "Cluster VPC considerations to Kubernetes Cluster"
+  type        = string
+  default     = "shared"
+}

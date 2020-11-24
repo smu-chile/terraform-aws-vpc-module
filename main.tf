@@ -39,7 +39,8 @@ resource "aws_vpc" "this" {
 
   tags = merge(
     {
-      "Name" = format("%s", var.name)
+      "Name" = format("%s", var.name),
+      "kubernetes.io/cluster/${var.name}" = var.cluster-vpc
     },
     var.tags,
     var.vpc_tags,
@@ -139,7 +140,8 @@ resource "aws_internet_gateway" "this" {
 
   tags = merge(
     {
-      "Name" = format("%s", var.name)
+      "Name" = format("%s", var.name),
+      "kubernetes.io/cluster/${var.name}" = var.cluster-vpc
     },
     var.tags,
     var.igw_tags,
@@ -344,7 +346,9 @@ resource "aws_subnet" "public" {
         "%s-${var.public_subnet_suffix}-%s",
         var.name,
         element(var.azs, count.index),
-      )
+      ),
+      "kubernetes.io/cluster/${var.name}" = var.cluster-vpc,
+      "kubernetes.io/role/elb" = 1
     },
     var.tags,
     var.public_subnet_tags,
@@ -371,7 +375,9 @@ resource "aws_subnet" "private" {
         "%s-${var.private_subnet_suffix}-%s",
         var.name,
         element(var.azs, count.index),
-      )
+      ),
+      "kubernetes.io/cluster/${var.name}" = var.cluster-vpc,
+      "kubernetes.io/role/elb" = 1
     },
     var.tags,
     var.private_subnet_tags,
